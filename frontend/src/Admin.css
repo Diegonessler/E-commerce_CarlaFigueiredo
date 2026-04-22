@@ -1,0 +1,135 @@
+    /* Container Principal */
+    .admin-container {
+    padding: 30px;
+    background-color: #FDF8F3;
+    min-height: 100vh;
+    font-family: sans-serif;
+    }
+
+    .admin-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    }
+
+    .admin-header h2 { color: #5D4037; margin-bottom: 5px; }
+    .admin-header p { color: #8D6E63; margin-top: 0; }
+
+    .back-link {
+    text-decoration: none;
+    color: #5D4037;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    }
+
+    /* Tabs */
+    .tab-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    }
+
+    .tab-button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: bold;
+    transition: 0.2s;
+    }
+
+    .tab-button.active { background-color: #5D4037; color: white; }
+    .tab-button.inactive { background-color: #EADBC8; color: #5D4037; }
+
+    /* Grid e Cards */
+    .admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    }
+
+    .admin-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 15px;
+    color: #5D4037;
+    }
+
+    /* Formulários */
+    .admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    }
+
+    .admin-input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #DDD;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    }
+
+    .upload-box {
+    padding: 10px;
+    border: 1px dashed #CCC;
+    border-radius: 8px;
+    background-color: #FAFAFA;
+    }
+
+    /* Botões e Itens */
+    .btn-primary {
+    padding: 12px;
+    background-color: #6b3e26;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    }
+
+    .btn-primary:disabled { opacity: 0.5; }
+
+    .item-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #EEE;
+    }
+
+    .mini-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    object-fit: cover;
+    }
+
+    .badge-preview {
+    margin-left: 8px;
+    background-color: #f1dcc3;
+    color: #6b3e26;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    }
