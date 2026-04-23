@@ -68,6 +68,8 @@ button {
   display: flex;
   flex-direction: column;
   line-height: 1;
+  justify-content: center;
+  gap: 2px;
 }
 
 .logo-title {
@@ -78,11 +80,13 @@ button {
 }
 
 .logo-subtitle {
-  margin-top: 4px;
-  font-size: 0.75rem;
+  margin-top: 2px;
+  font-size: 0.68rem;
   font-weight: 800;
-  letter-spacing: 1.7px;
+  letter-spacing: 1.5px;
   color: var(--gold);
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .nav {
