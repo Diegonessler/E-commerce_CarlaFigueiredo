@@ -1,4 +1,3 @@
-/* ===== BASE ===== */
 @import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
 
 :root {
@@ -42,7 +41,7 @@ button {
   font-family: inherit;
 }
 
-/* ===== HEADER ===== */
+/* HEADER */
 .header {
   height: 90px;
   padding: 0 58px;
@@ -126,7 +125,7 @@ button {
   justify-content: center;
 }
 
-/* ===== HERO ===== */
+/* HERO */
 .hero {
   min-height: 560px;
   display: grid;
@@ -200,19 +199,19 @@ button {
   background: var(--brown-dark);
 }
 
-/* ===== AJUSTE HERO FEATURES ===== */
+/* HERO FEATURES */
 .hero-features {
   margin-top: 34px;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   gap: 20px;
-  flex-wrap: nowrap; /* mantém lado a lado */
+  flex-wrap: wrap; /* permite quebrar em telas menores */
 }
 
 .feature-item {
-  flex: 1;
-  max-width: 120px;
+  flex: 0 0 auto;
+  width: 120px;
   text-align: center;
 }
 
@@ -252,10 +251,21 @@ button {
       center/cover no-repeat;
 }
 
-/* ===== RESPONSIVO ===== */
+/* RESPONSIVO */
 @media (max-width: 600px) {
+  .hero-heading h2 {
+    font-size: 3rem;
+  }
+
+  .hero-heading span {
+    font-size: 2.8rem;
+  }
+
+  .hero-description {
+    font-size: 1.06rem;
+  }
+
   .hero-features {
-    flex-wrap: wrap; /* permite quebrar em telas pequenas */
-    justify-content: center;
+    justify-content: center; /* mantém centralizado mesmo quebrando */
   }
 }
