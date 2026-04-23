@@ -1,5 +1,117 @@
 @import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
+@media (max-width: 1024px) {
+  .header {
+    padding: 0 24px;
+  }
+  
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: 40px 24px;
+  }
 
+  .hero-left { padding-right: 0; }
+  
+  .hero-heading h2 { font-size: 4rem; }
+  .hero-heading span { font-size: 3.5rem; }
+  
+  .hero-features {
+    justify-content: center;
+  }
+
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas no tablet */
+  }
+
+  .kits-section {
+    grid-template-columns: 1fr;
+    margin: 18px 24px;
+  }
+
+  .about-section {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    text-align: center;
+  }
+  
+  .about-text p { max-width: 100%; }
+}
+
+/* Ajustes para Celulares (Mobile) */
+@media (max-width: 768px) {
+  .header {
+    height: 70px;
+    padding: 0 15px;
+  }
+
+  .logo-title { font-size: 1.8rem; }
+  .logo-subtitle { font-size: 0.6rem; }
+
+  /* Esconde o menu de texto no mobile para não amontoar */
+  .nav {
+    display: none; 
+  }
+
+  /* Dropdown de busca ocupa quase a tela toda no celular */
+  .search-dropdown {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    z-index: 9999;
+  }
+
+  .hero-heading h2 { font-size: 3rem; }
+  .hero-heading span { font-size: 2.5rem; }
+  .hero-description { font-size: 1.1rem; }
+
+  .products-section { padding: 20px 15px; }
+  
+  /* Mantém 2 colunas pequenas no celular para as bolachas */
+  .products-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Ajuste do Card para telas pequenas */
+  .product-thumb { height: 160px; }
+  .product-info h3 { font-size: 0.95rem; min-height: 40px; }
+  .product-info p { display: none; } /* Esconde descrição no mobile para economizar espaço */
+  
+  .kits-right {
+    grid-template-columns: 1fr; /* Kits em 1 coluna por serem maiores */
+  }
+
+  .cta-box {
+    flex-direction: column;
+    text-align: center;
+    padding: 24px 15px;
+  }
+
+  .cta-button { width: 100%; }
+
+  /* Ajuste das features (ícones circulares) */
+  .hero-features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  .feature-item { width: auto; }
+  .feature-item p { font-size: 0.8rem; }
+  .feature-circle { width: 45px; height: 45px; }
+}
+
+/* Ajuste extra para celulares muito pequenos */
+@media (max-width: 400px) {
+  .products-grid {
+    grid-template-columns: 1fr; /* 1 coluna se a tela for minúscula */
+  }
+}
 :root {
   --bg-main: #f5ebdd;
   --bg-soft: #f7efe4;
