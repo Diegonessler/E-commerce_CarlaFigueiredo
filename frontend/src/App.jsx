@@ -195,15 +195,7 @@ function SearchDropdown({ products, kits, onClose, onAddToCart, onFeedback }) {
       )}
     </div>
   );
-  return (
-  <div className="search-dropdown" ref={containerRef}>
-    <div className="search-mobile-header">
-       <span>Buscar</span>
-       <button onClick={onClose}><X size={20}/></button>
-    </div>
-    {/* ... resto do código igual ... */}
-  </div>
-);
+  
 }
 
 /* ============================================================
