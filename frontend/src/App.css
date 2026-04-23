@@ -1,118 +1,371 @@
+@import url("https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap");
+
+:root {
+  --bg-main: #f5ebdd;
+  --bg-soft: #f7efe4;
+  --bg-card: #fffaf5;
+  --bege-sec: #e8d8c3;
+  --brown-main: #6b3e26;
+  --brown-dark: #4a2c1d;
+  --gold: #c89b5a;
+  --text-soft: #7a604f;
+  --line-soft: rgba(107, 62, 38, 0.08);
+  --shadow-soft: 0 8px 18px rgba(107, 62, 38, 0.08);
+  --radius-xl: 26px;
+  --radius-lg: 20px;
+  --radius-md: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg-main);
+  font-family: "Inter", sans-serif;
+  color: var(--brown-dark);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+.page-shell {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  background: linear-gradient(180deg, #f8efe4 0%, #f5ebdd 100%);
+}
+
+/* ===== HEADER ===== */
+.header {
+  height: 90px;
+  padding: 0 58px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f7ede2;
+}
+
+.logo-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.logo-title {
+  font-family: "Great Vibes", cursive;
+  font-size: 2.3rem;
+  font-weight: 400;
+  color: var(--brown-main);
+}
+
+.logo-subtitle {
+  margin-top: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1.7px;
+  color: var(--gold);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 38px;
+}
+
+.nav a {
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: #6e4e3c;
+}
+
+.nav a:hover {
+  color: var(--brown-main);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-icon {
+  border: none;
+  background: transparent;
+  color: var(--brown-main);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-badge {
+  position: absolute;
+  top: -7px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--brown-main);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== SEARCH DROPDOWN ===== */
+.search-wrapper {
+  position: relative;
+}
+
+.search-dropdown {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  width: 380px;
+  background: #4a3728;
+  border-radius: 14px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.28);
+  padding: 16px;
+  z-index: 300;
+  animation: slideDown 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 0 14px;
+}
+
+.search-panel-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 1rem;
+  padding: 14px 0;
+}
+
+.search-panel-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 560px;
+  display: grid;
+  grid-template-columns: 0.95fr 1.2fr;
+  align-items: center;
+  gap: 12px;
+  padding: 28px 58px 26px;
+  background: linear-gradient(180deg, #f8eee2 0%, #f4e8db 100%);
+}
+
+.hero-left {
+  padding-right: 10px;
+}
+
+.hero-ornament {
+  font-size: 2.7rem;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.hero-heading h2 {
+  font-family: "Playfair Display", serif;
+  font-size: 5rem;
+  font-weight: 700;
+  color: var(--brown-main);
+  line-height: 0.95;
+}
+
+.hero-heading span {
+  font-family: "Great Vibes", cursive;
+  font-size: 4.4rem;
+  color: var(--gold);
+  line-height: 0.9;
+  margin-top: 8px;
+}
+
+.hero-description {
+  font-size: 1.32rem;
+  line-height: 1.5;
+  color: #715544;
+  font-weight: 500;
+  margin-bottom: 28px;
+}
+
+.hero-features {
+  margin-top: 34px;
+  display: flex;
+  align-items: flex-start;
+  gap: 38px;
+}
+
+.feature-item {
+  width: 110px;
+  text-align: center;
+}
+
+.feature-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  border: 1.8px solid rgba(200, 155, 90, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  background: rgba(255, 250, 245, 0.65);
+}
+
+.feature-item p {
+  font-size: 0.98rem;
+  line-height: 1.25;
+  color: #6f5240;
+  font-weight: 600;
+}
+
+.hero-image {
+  width: 100%;
+  height: 515px;
+  border-radius: 18px;
+  background: linear-gradient(rgba(245, 235, 221, 0.04), rgba(245, 235, 221, 0.04)),
+    url("../imagens/hero.png") center/cover no-repeat;
+}
+
+/* ===== PRODUCTS GRID ===== */
+.products-section {
+  padding: 12px 58px 24px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.product-card {
+  background: var(--bg-card);
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  box-shadow: var(--shadow-soft);
+}
+
+.product-thumb {
+  height: 210px;
+  background-size: cover;
+  background-position: center;
+}
+
+/* ===== KITS ===== */
+.kits-section {
+  margin: 18px 58px 22px;
+  padding: 24px 28px;
+  background: #f2e2cf;
+  border-radius: 24px;
+  display: grid;
+  grid-template-columns: 0.8fr 1.45fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.kits-right {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes slideDown {
+  from { transform: translateY(-8px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
 /* ============================================================
-   RESPONSIVIDADE AVANÇADA (MOBILE-FIRST)
+   RESPONSIVO (Ajustes de Tablet e Celular)
    ============================================================ */
 
-/* Ajustes Gerais para Telas Médias (Tablets) */
+/* Tablet */
 @media (max-width: 1024px) {
-  .header {
-    padding: 0 24px;
-  }
-  
-  .hero {
-    grid-template-columns: 1fr;
-    text-align: center;
-    padding: 40px 24px;
-  }
-
+  .header { padding: 0 24px; }
+  .hero { grid-template-columns: 1fr; text-align: center; padding: 40px 24px; }
   .hero-left { padding-right: 0; }
-  
   .hero-heading h2 { font-size: 4rem; }
   .hero-heading span { font-size: 3.5rem; }
-  
-  .hero-features {
-    justify-content: center;
-  }
-
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas no tablet */
-  }
-
-  .kits-section {
-    grid-template-columns: 1fr;
-    margin: 18px 24px;
-  }
-
-  .about-section {
-    grid-template-columns: 1fr;
-    padding: 24px;
-    text-align: center;
-  }
-  
-  .about-text p { max-width: 100%; }
+  .hero-features { justify-content: center; }
+  .products-grid { grid-template-columns: repeat(2, 1fr); }
+  .kits-section { grid-template-columns: 1fr; margin: 18px 24px; }
 }
 
-/* Ajustes para Celulares (Mobile) */
+/* Celular */
 @media (max-width: 768px) {
-  .header {
-    height: 70px;
-    padding: 0 15px;
-  }
-
+  .header { height: 70px; padding: 0 15px; }
+  .nav { display: none; }
+  
   .logo-title { font-size: 1.8rem; }
-  .logo-subtitle { font-size: 0.6rem; }
-
-  /* Esconde o menu de texto no mobile para não amontoar */
-  .nav {
-    display: none; 
-  }
-
-  /* Dropdown de busca ocupa quase a tela toda no celular */
-  .search-dropdown {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    border-radius: 0;
-    z-index: 9999;
-  }
-
-  .hero-heading h2 { font-size: 3rem; }
-  .hero-heading span { font-size: 2.5rem; }
-  .hero-description { font-size: 1.1rem; }
-
-  .products-section { padding: 20px 15px; }
   
-  /* Mantém 2 colunas pequenas no celular para as bolachas */
-  .products-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  /* Ajuste do Card para telas pequenas */
-  .product-thumb { height: 160px; }
-  .product-info h3 { font-size: 0.95rem; min-height: 40px; }
-  .product-info p { display: none; } /* Esconde descrição no mobile para economizar espaço */
-  
-  .kits-right {
-    grid-template-columns: 1fr; /* Kits em 1 coluna por serem maiores */
-  }
-
-  .cta-box {
-    flex-direction: column;
-    text-align: center;
-    padding: 24px 15px;
-  }
-
-  .cta-button { width: 100%; }
-
-  /* Ajuste das features (ícones circulares) */
+  /* CORREÇÃO DAS FEATURES - AGORA LADO A LADO NO CELULAR */
   .hero-features {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    display: flex !important; /* Força flexbox */
+    flex-direction: row !important; /* Força horizontal */
+    justify-content: space-between; /* Espalha igualmente */
+    gap: 8px;
+    margin-top: 25px;
+    width: 100%;
+  }
+
+  .feature-item {
+    width: 33%; /* Divide o espaço em 3 */
+    text-align: center;
+  }
+
+  .feature-circle {
+    width: 48px; /* Reduz tamanho para caber no celular */
+    height: 48px;
+    margin-bottom: 8px;
+  }
+
+  .feature-item p {
+    font-size: 0.72rem; /* Fonte menor para não quebrar layout */
+    line-height: 1.1;
   }
   
-  .feature-item { width: auto; }
-  .feature-item p { font-size: 0.8rem; }
-  .feature-circle { width: 45px; height: 45px; }
+  .hero-heading h2 { font-size: 3rem; }
+  .hero-heading span { font-size: 2.8rem; }
+  .hero-description { font-size: 1.1rem; }
+  
+  .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .product-thumb { height: 160px; }
+  .product-info p { display: none; } /* Ganha espaço ocultando a descrição */
 }
 
-/* Ajuste extra para celulares muito pequenos */
+/* Celular muito pequeno */
 @media (max-width: 400px) {
-  .products-grid {
-    grid-template-columns: 1fr; /* 1 coluna se a tela for minúscula */
-  }
+  .products-grid { grid-template-columns: 1fr; }
+  .hero-heading h2 { font-size: 2.5rem; }
+  .feature-item p { font-size: 0.65rem; }
 }

@@ -195,7 +195,6 @@ function SearchDropdown({ products, kits, onClose, onAddToCart, onFeedback }) {
       )}
     </div>
   );
-  
 }
 
 /* ============================================================
