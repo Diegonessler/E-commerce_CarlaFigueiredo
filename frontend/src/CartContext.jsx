@@ -18,7 +18,6 @@ export function CartProvider({ children }) {
 
   const addToCart = (product) => {
     setCart(prevCart => {
-      // Procura pelo ID único (ex: 'p3' ou 'k3')
       const existing = prevCart.find(item => item.id === product.id);
       
       if (existing) {
@@ -32,6 +31,18 @@ export function CartProvider({ children }) {
     alert(`${product.title} adicionado! 🛒`);
   };
 
+  // --- NOVA FUNÇÃO ADICIONADA AQUI ---
+  const updateQuantity = (id, newQuantity) => {
+    if (newQuantity < 1) return; // Impede quantidade menor que 1
+    
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.id === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  };
+  // ----------------------------------
+
   const removeFromCart = (id) => {
     setCart(prevCart => prevCart.filter(item => item.id !== id));
   };
@@ -44,7 +55,8 @@ export function CartProvider({ children }) {
   }, 0);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, totalValue }}>
+    // Adicionado updateQuantity no value do Provider
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, totalValue }}>
       {children}
     </CartContext.Provider>
   );

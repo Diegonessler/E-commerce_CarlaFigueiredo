@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
-// Importação completa de ícones e LogOut
-import { Package, ShoppingBag, ArrowLeft, PlusCircle, Edit3, Save, Tag, LogOut } from "lucide-react";
+// Adicionado Trash2 na importação
+import { Package, ShoppingBag, ArrowLeft, PlusCircle, Edit3, Save, Tag, LogOut, Trash2 } from "lucide-react";
 import "./Admin.css";
 
 export default function AdminPanel() {
@@ -26,7 +26,6 @@ export default function AdminPanel() {
       }
     }
     checkAuth();
-    // Limpa o form de edição ao trocar de aba
     setEditItem({ id: "", title: "", price: "", image: "", badge: "" });
   }, [tab]);
 
@@ -38,6 +37,30 @@ export default function AdminPanel() {
       if (data) setItems(data);
     } catch (err) {
       console.error("Erro ao buscar:", err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // FUNÇÃO DE EXCLUSÃO ADICIONADA
+  async function handleDelete(id, title) {
+    const confirmar = window.confirm(`Tem certeza que deseja excluir "${title}"?`);
+    if (!confirmar) return;
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.from(tab).delete().eq('id', id);
+      if (error) throw error;
+      
+      alert("Item removido com sucesso!");
+      fetchItems(); // Recarrega a lista
+      
+      // Se o item deletado for o que estava sendo editado, limpa o form
+      if (editItem.id === id) {
+        setEditItem({ id: "", title: "", price: "", image: "", badge: "" });
+      }
+    } catch (err) {
+      alert("Erro ao excluir: " + err.message);
     } finally {
       setLoading(false);
     }
@@ -208,13 +231,25 @@ export default function AdminPanel() {
             <div style={{maxHeight: '250px', overflowY: 'auto'}}>
               {loading && items.length === 0 ? <p>Buscando itens...</p> : 
                 items.map(item => (
-                <div key={item.id} className="item-row">
-                  <img src={item.image} className="mini-img" alt="" />
-                  <div style={{flex: 1, fontSize: '13px'}}>
-                    <strong>{item.title}</strong>
-                    {item.badge && <span className="badge-preview">{item.badge}</span>}
-                    <br/>{item.price}
+                <div key={item.id} className="item-row" style={{justifyContent: 'space-between'}}>
+                  <div style={{display: 'flex', gap: '10px', alignItems: 'center'}}>
+                    <img src={item.image} className="mini-img" alt="" />
+                    <div style={{fontSize: '13px'}}>
+                      <strong>{item.title}</strong>
+                      {item.badge && <span className="badge-preview">{item.badge}</span>}
+                      <br/>{item.price}
+                    </div>
                   </div>
+                  
+                  {/* BOTÃO DE EXCLUIR */}
+                  <button 
+                    onClick={() => handleDelete(item.id, item.title)}
+                    className="btn-delete"
+                    title="Excluir item"
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#ff4d4d', padding: '5px' }}
+                  >
+                    <Trash2 size={18} />
+                  </button>
                 </div>
               ))}
             </div>
