@@ -70,7 +70,7 @@ export default function Carrinho() {
         <button onClick={() => window.location.pathname = '/'} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8D6E63' }}>
           <ArrowLeft size={30} />
         </button>
-        <h2 style={{ margin: 0 }}>Finalizar Pedido</h2>
+        <h2 style={{ margin: 0 , color: '#8D6E63'}}>Finalizar Pedido</h2>
       </header>
 
       {cart.length === 0 ? (
@@ -171,7 +171,7 @@ export default function Carrinho() {
               onClick={enviarWhatsApp} 
               disabled={enviando}
               style={{ 
-                backgroundColor: enviando ? '#ccc' : '#25D366', 
+                backgroundColor: enviando ? ' #ccc' : '#25D366', 
                 color: 'white', 
                 padding: '20px', 
                 border: 'none', 
