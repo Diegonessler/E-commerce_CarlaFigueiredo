@@ -19,7 +19,6 @@ export function CartProvider({ children }) {
   const addToCart = (product) => {
     setCart(prevCart => {
       const existing = prevCart.find(item => item.id === product.id);
-      
       if (existing) {
         return prevCart.map(item => 
           item.id === product.id 
@@ -28,34 +27,34 @@ export function CartProvider({ children }) {
       }
       return [...prevCart, { ...product, quantity: 1 }];
     });
-    alert(`${product.title} adicionado! 🛒`);
   };
 
-  // --- NOVA FUNÇÃO ADICIONADA AQUI ---
   const updateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return; // Impede quantidade menor que 1
-    
+    if (newQuantity < 1) return;
     setCart(prevCart =>
       prevCart.map(item =>
         item.id === id ? { ...item, quantity: newQuantity } : item
       )
     );
   };
-  // ----------------------------------
 
   const removeFromCart = (id) => {
     setCart(prevCart => prevCart.filter(item => item.id !== id));
   };
 
+  // Cálculo de total robusto
   const totalValue = cart.reduce((acc, item) => {
     const priceString = String(item.price || "0");
-    const priceClean = priceString.replace(/[^\d,.]/g, '').replace(',', '.');
+    const priceClean = priceString
+        .replace('R$', '')
+        .replace(/\./g, '')
+        .replace(',', '.')
+        .trim();
     const price = parseFloat(priceClean) || 0;
     return acc + (price * item.quantity);
   }, 0);
 
   return (
-    // Adicionado updateQuantity no value do Provider
     <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, totalValue }}>
       {children}
     </CartContext.Provider>
