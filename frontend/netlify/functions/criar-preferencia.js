@@ -5,7 +5,6 @@ const client = new MercadoPagoConfig({
 });
 
 exports.handler = async (event) => {
-  // Tratamento de CORS para evitar erros de bloqueio no navegador
   if (event.httpMethod === 'OPTIONS') {
     return { 
       statusCode: 200, 
@@ -20,36 +19,33 @@ exports.handler = async (event) => {
   try {
     const { cart } = JSON.parse(event.body);
 
-    if (!cart || cart.length === 0) {
-      return { statusCode: 400, body: JSON.stringify({ error: "Carrinho vazio" }) };
-    }
-
     const preference = new Preference(client);
 
-    // LIMPEZA TOTAL DOS ITENS
     const itemsParaMP = cart.map(item => {
-      // 1. Transforma o preço em string
-      let priceStr = String(item.price);
-      
-      // 2. Remove TUDO que não for número, vírgula ou ponto
-      // Isso tira "R$", espaços, letras, etc.
-      let priceClean = priceStr.replace(/[^\d,.]/g, '');
+      // 1. Pega o preço e remove TUDO que não for número, ponto ou vírgula
+      let precoOriginal = String(item.price || "0");
+      let apenasNumeros = precoOriginal.replace(/[^\d,.]/g, '');
 
-      // 3. Se tiver vírgula (padrão brasileiro), troca por ponto
-      // Se tiver ponto de milhar (ex: 1.000,00), removemos o ponto e tratamos a vírgula
-      if (priceClean.includes(',') && priceClean.includes('.')) {
-         priceClean = priceClean.replace(/\./g, '').replace(',', '.');
+      // 2. Lida com o formato brasileiro (converte vírgula para ponto)
+      if (apenasNumeros.includes(',') && apenasNumeros.includes('.')) {
+        apenasNumeros = apenasNumeros.replace(/\./g, '').replace(',', '.');
       } else {
-         priceClean = priceClean.replace(',', '.');
+        apenasNumeros = apenasNumeros.replace(',', '.');
       }
 
-      const priceNumber = parseFloat(priceClean);
+      // 3. Converte para número e garante que não seja NaN ou 0
+      let precoFinal = parseFloat(apenasNumeros);
+      if (isNaN(precoFinal) || precoFinal <= 0) {
+        precoFinal = 1.00; // Valor de segurança caso o preço chegue errado
+      }
+
+      console.log(`Item: ${item.title} | Preço Original: ${precoOriginal} | Preço Final: ${precoFinal}`);
 
       return {
         id: String(item.id),
-        title: String(item.title),
-        unit_price: Number(priceNumber.toFixed(2)), // Força 2 casas decimais e tipo Number
-        quantity: Number(item.quantity),
+        title: String(item.title).substring(0, 255), // Limite de caracteres do MP
+        unit_price: Number(precoFinal.toFixed(2)),
+        quantity: Number(item.quantity) || 1,
         currency_id: 'BRL'
       };
     });
@@ -76,14 +72,11 @@ exports.handler = async (event) => {
     };
 
   } catch (error) {
-    console.error("ERRO DETALHADO NO MP:", error);
+    console.error("ERRO NO BACKEND:", error);
     return { 
       statusCode: 500, 
       headers: { "Access-Control-Allow-Origin": "*" },
-      body: JSON.stringify({ 
-        error: "Erro ao gerar pagamento", 
-        message: error.message 
-      }) 
+      body: JSON.stringify({ error: error.message }) 
     };
   }
 };
