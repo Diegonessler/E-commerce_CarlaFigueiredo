@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { useCart } from "./CartContext";
-import "./catalogo.css";
+
 
 export default function CatalogoKits() {
   const [kits, setKits] = useState([]);
