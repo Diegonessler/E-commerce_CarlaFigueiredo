@@ -1,28 +1,27 @@
 import React, { useState } from 'react';
 import { useCart } from './CartContext';
-import { ArrowLeft, Trash2, Plus, Minus } from 'lucide-react';
+import { ArrowLeft, Trash2, Plus, Minus, Truck, Store } from 'lucide-react';
 
 export default function Carrinho() {
   const { cart, removeFromCart, totalValue, updateQuantity } = useCart();
-  const [cliente, setCliente] = useState({ nome: '', endereco: '', metodo: 'cartao' });
+  const [cliente, setCliente] = useState({ 
+    nome: '', 
+    endereco: '', 
+    horario: '', 
+    tipoEntrega: 'entrega' // 'entrega' ou 'retirada'
+  });
   const [enviando, setEnviando] = useState(false);
 
-  // Função para gerar mensagem do WhatsApp
-  const gerarMensagemWhats = () => {
-    const itens = cart.map(i => `- ${i.quantity}x ${i.title}`).join('%0A');
-    const texto = `Olá! Acabei de fazer um pedido na Doce Afeto:%0A%0A*Itens:*%0A${itens}%0A%0A*Total:* R$ ${totalValue.toFixed(2)}%0A*Cliente:* ${cliente.nome}%0A*Entrega:* ${cliente.endereco}%0A*Pagamento:* Mercado Pago (Cartão/Pix)`;
-    return `https://wa.me/5547999999999?text=${texto}`; // <--- COLOQUE SEU NÚMERO AQUI
-  };
-
   const finalizarPedido = async () => {
-    if (!cliente.nome || !cliente.endereco) {
-      alert("Por favor, preencha seu nome e endereço para a entrega!");
+    // Validação lógica: se for entrega, endereço é obrigatório. Se for retirada, não.
+    if (!cliente.nome || (cliente.tipoEntrega === 'entrega' && !cliente.endereco)) {
+      alert("Por favor, preencha seu nome e as informações de entrega!");
       return;
     }
+    
     setEnviando(true);
 
     try {
-      // 1. Envia para sua Netlify Function
       const res = await fetch('/.netlify/functions/criar-preferencia', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -32,13 +31,16 @@ export default function Carrinho() {
       const data = await res.json();
 
       if (data.init_point) {
-        // 2. Salva os dados no localStorage para a página de sucesso ler e mandar o Whats
-        localStorage.setItem('ultimo_pedido', JSON.stringify({
-          cliente: cliente.nome,
-          linkWhats: gerarMensagemWhats()
+        // Salva os dados para a página de sucesso ler depois
+        const enderecoFinal = cliente.tipoEntrega === 'retirada' ? 'RETIRADA NO LOCAL' : cliente.endereco;
+        
+        localStorage.setItem('dados_cliente', JSON.stringify({
+          nome: cliente.nome,
+          endereco: enderecoFinal,
+          horario: cliente.horario || 'A combinar'
         }));
 
-        // 3. Redireciona para o Checkout Profissional (Lá ele escolhe Pix ou Cartão)
+        // Redireciona para o Mercado Pago
         window.location.href = data.init_point;
       }
     } catch (err) {
@@ -55,32 +57,36 @@ export default function Carrinho() {
         <button onClick={() => window.history.back()} style={btnBackStyle}>
           <ArrowLeft size={28} color="#8D6E63" />
         </button>
-        <h2 style={{ color: '#FDF5E6', margin: 0, marginLeft: '10px', fontSize: '24px' }}>Finalizar Pedido</h2>
+        <h2 style={{ color: '#5D4037', margin: 0, marginLeft: '10px', fontSize: '24px' }}>Finalizar Pedido</h2>
       </header>
 
       <div style={mainGridStyle}>
         
-        {/* COLUNA ESQUERDA: PEDIDO */}
+        {/* COLUNA ESQUERDA: LISTA DE PRODUTOS */}
         <div style={cardPedidoStyle}>
           <h3 style={titleStyle}>Seu Pedido</h3>
           <div style={{ borderBottom: '2px solid #8D6E63', marginBottom: '20px' }} />
           
-          {cart.map(item => (
-            <div key={item.id} style={itemRowStyle}>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: 'bold', fontSize: '18px', color: '#5D4037' }}>{item.title}</div>
-                <div style={{ color: '#8D6E63' }}>R$ {item.price}</div>
-              </div>
+          {cart.length === 0 ? (
+            <p style={{ textAlign: 'center', color: '#8D6E63' }}>Seu carrinho está vazio.</p>
+          ) : (
+            cart.map(item => (
+              <div key={item.id} style={itemRowStyle}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 'bold', fontSize: '18px', color: '#5D4037' }}>{item.title}</div>
+                  <div style={{ color: '#8D6E63' }}>{item.price}</div>
+                </div>
 
-              <div style={qtyControlsStyle}>
-                <button onClick={() => updateQuantity(item.id, item.quantity - 1)} style={btnQtySmall}><Minus size={14}/></button>
-                <span style={{ fontWeight: 'bold', width: '25px', textAlign: 'center', color: '#5D4037' }}>{item.quantity}</span>
-                <button onClick={() => updateQuantity(item.id, item.quantity + 1)} style={btnQtySmall}><Plus size={14}/></button>
-              </div>
+                <div style={qtyControlsStyle}>
+                  <button onClick={() => updateQuantity(item.id, item.quantity - 1)} style={btnQtySmall}><Minus size={14}/></button>
+                  <span style={{ fontWeight: 'bold', width: '25px', textAlign: 'center', color: '#5D4037' }}>{item.quantity}</span>
+                  <button onClick={() => updateQuantity(item.id, item.quantity + 1)} style={btnQtySmall}><Plus size={14}/></button>
+                </div>
 
-              <button onClick={() => removeFromCart(item.id)} style={btnTrash}><Trash2 size={20}/></button>
-            </div>
-          ))}
+                <button onClick={() => removeFromCart(item.id)} style={btnTrash}><Trash2 size={20}/></button>
+              </div>
+            ))
+          )}
 
           <div style={{ textAlign: 'right', marginTop: '30px' }}>
             <p style={{ margin: 0, color: '#8D6E63' }}>Total do Pedido:</p>
@@ -88,27 +94,70 @@ export default function Carrinho() {
           </div>
         </div>
 
-        {/* COLUNA DIREITA: DADOS */}
+        {/* COLUNA DIREITA: DADOS E ENTREGA */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
           
           <section>
             <h3 style={labelHeaderStyle}>Seus Dados</h3>
+            
             <input 
               type="text" 
-              placeholder="Nome Completo" 
+              placeholder="Seu Nome Completo" 
               style={darkInputStyle} 
+              value={cliente.nome}
               onChange={e => setCliente({...cliente, nome: e.target.value})}
             />
-            <textarea 
-              placeholder="Endereço de Entrega (Rua, Número, Bairro)" 
-              style={{ ...darkInputStyle, minHeight: '100px', marginTop: '10px' }}
-              onChange={e => setCliente({...cliente, endereco: e.target.value})}
+
+            {/* SELETOR DE ENTREGA OU RETIRADA */}
+            <div style={toggleContainerStyle}>
+              <button 
+                onClick={() => setCliente({...cliente, tipoEntrega: 'entrega'})}
+                style={{
+                  ...toggleButtonStyle,
+                  backgroundColor: cliente.tipoEntrega === 'entrega' ? '#8D6E63' : '#E0C9B0',
+                  color: '#FFF'
+                }}
+              >
+                <Truck size={18} /> Entrega
+              </button>
+              <button 
+                onClick={() => setCliente({...cliente, tipoEntrega: 'retirada'})}
+                style={{
+                  ...toggleButtonStyle,
+                  backgroundColor: cliente.tipoEntrega === 'retirada' ? '#8D6E63' : '#E0C9B0',
+                  color: '#FFF'
+                }}
+              >
+                <Store size={18} /> Vou Buscar
+              </button>
+            </div>
+
+            {/* CAMPOS CONDICIONAIS */}
+            {cliente.tipoEntrega === 'entrega' ? (
+              <textarea 
+                placeholder="Endereço Completo (Rua, Número, Bairro)" 
+                style={{ ...darkInputStyle, minHeight: '100px', marginTop: '10px' }}
+                value={cliente.endereco}
+                onChange={e => setCliente({...cliente, endereco: e.target.value})}
+              />
+            ) : (
+              <div style={avisoRetiradaStyle}>
+                📍 <strong>Retirada:</strong> O endereço para busca será confirmado pela Carla após o pagamento.
+              </div>
+            )}
+
+            <input 
+              type="text" 
+              placeholder={cliente.tipoEntrega === 'entrega' ? "Horário para entrega" : "Horário que virá retirar"} 
+              style={{ ...darkInputStyle, marginTop: '10px' }} 
+              value={cliente.horario}
+              onChange={e => setCliente({...cliente, horario: e.target.value})}
             />
           </section>
 
           <section style={infoPagamentoStyle}>
             <p style={{ margin: 0, fontSize: '14px' }}>
-              Você será redirecionado para o <strong>Mercado Pago</strong> para finalizar com Cartão ou Pix de forma segura.
+              Pagamento via <strong>Mercado Pago</strong> (Pix ou Cartão).
             </p>
           </section>
 
@@ -125,7 +174,7 @@ export default function Carrinho() {
   );
 }
 
-// ESTILOS MANTIDOS E OTIMIZADOS
+// ESTILOS
 const containerStyle = { backgroundColor: '#F5E6D3', minHeight: '100vh', padding: '40px 20px', fontFamily: '"Segoe UI", Roboto, sans-serif' };
 const mainGridStyle = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px', maxWidth: '1100px', margin: '0 auto' };
 const cardPedidoStyle = { backgroundColor: '#FFF9F0', padding: '30px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', alignSelf: 'start' };
@@ -139,3 +188,6 @@ const itemRowStyle = { display: 'flex', alignItems: 'center', padding: '15px 0',
 const btnQtySmall = { backgroundColor: '#8D6E63', color: '#FFF', border: 'none', borderRadius: '5px', width: '25px', height: '25px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' };
 const qtyControlsStyle = { display: 'flex', alignItems: 'center', gap: '10px', margin: '0 15px' };
 const btnTrash = { color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' };
+const toggleContainerStyle = { display: 'flex', gap: '10px', marginTop: '15px' };
+const toggleButtonStyle = { flex: 1, padding: '12px', borderRadius: '10px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', fontWeight: 'bold', transition: '0.3s' };
+const avisoRetiradaStyle = { marginTop: '10px', padding: '15px', backgroundColor: '#E0C9B0', borderRadius: '10px', color: '#5D4037', fontSize: '14px', lineHeight: '1.4' };
