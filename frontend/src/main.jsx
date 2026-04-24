@@ -6,26 +6,23 @@ import LoginAdmin from './LoginAdmin.jsx'
 import CatalogoProdutos from './CatalogoProdutos.jsx'
 import CatalogoKits from './CatalogoKits.jsx'
 import Carrinho from './Carrinho.jsx'
+import Sucesso from './Sucesso.jsx' // <--- IMPORTANTE: Importe a nova página
 import { CartProvider } from './CartContext'
 import { supabase } from './supabaseClient'
 import './index.css'
 
 function Router() {
-  // Estado para rastrear o caminho atual
   const [path, setPath] = useState(window.location.pathname);
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState(null);
 
   useEffect(() => {
-    // 1. Monitorar mudanças na URL (quando você clica em botões)
     const handleLocationChange = () => {
       setPath(window.location.pathname);
     };
 
-    // Escuta quando o usuário volta ou avança no navegador
     window.addEventListener('popstate', handleLocationChange);
 
-    // 2. Checar sessão no Supabase
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setLoading(false);
@@ -48,7 +45,7 @@ function Router() {
   // Login e Admin
   if (path === '/admin') {
     if (!session) {
-      window.location.href = '/login-admin'; // Mudança para href garante o redirecionamento
+      window.location.href = '/login-admin';
       return null;
     }
     return <AdminPanel />;
@@ -66,6 +63,9 @@ function Router() {
   if (path === '/todos-produtos') return <CatalogoProdutos />;
   if (path === '/todos-kits')     return <CatalogoKits />;
   if (path === '/carrinho')       return <Carrinho />;
+  
+  // --- NOVA ROTA ADICIONADA AQUI ---
+  if (path === '/sucesso')        return <Sucesso />; 
 
   // Home
   return <App />;

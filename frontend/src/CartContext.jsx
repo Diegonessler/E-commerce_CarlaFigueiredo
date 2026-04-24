@@ -42,7 +42,13 @@ export function CartProvider({ children }) {
     setCart(prevCart => prevCart.filter(item => item.id !== id));
   };
 
-  // Cálculo de total robusto
+  // --- NOVA FUNÇÃO ADICIONADA ---
+  const clearCart = () => {
+    setCart([]);
+    localStorage.removeItem('carrinho_carla');
+  };
+
+  // Cálculo de total robusto (limpa R$, pontos e vírgulas)
   const totalValue = cart.reduce((acc, item) => {
     const priceString = String(item.price || "0");
     const priceClean = priceString
@@ -55,7 +61,14 @@ export function CartProvider({ children }) {
   }, 0);
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, totalValue }}>
+    <CartContext.Provider value={{ 
+      cart, 
+      addToCart, 
+      removeFromCart, 
+      updateQuantity, 
+      totalValue, 
+      clearCart // Exportando a nova função
+    }}>
       {children}
     </CartContext.Provider>
   );
