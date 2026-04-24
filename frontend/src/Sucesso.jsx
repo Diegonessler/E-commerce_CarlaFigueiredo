@@ -9,22 +9,35 @@ const PaginaSucesso = () => {
   const enviarWhatsApp = () => {
     const numeroCarla = "5547989038296"; 
     
-    let texto = `*Novo Pedido - Doce Afeto* 🍪\n\n`;
+    // Pega o ID do pagamento da URL (opcional)
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentId = urlParams.get('payment_id');
+
+    let texto = `*NOVO PEDIDO - DOCE AFETO* 🍪\n`;
+    texto += `--------------------------------\n\n`;
+    
+    texto += `*DETALHES DO PEDIDO:*\n`;
     cart.forEach(item => {
-      texto += `• ${item.quantity}x ${item.title}\n`;
+      texto += `✅ ${item.quantity}x ${item.title}\n`;
     });
-    texto += `\n*Total:* R$ ${totalValue.toFixed(2)}`;
-    texto += `\n*Status:* Pagamento Confirmado ✅`;
+    
+    texto += `\n*VALOR TOTAL:* R$ ${totalValue.toFixed(2)}\n`;
+    texto += `*STATUS:* Pagamento Confirmado ✅\n`;
+    
+    if (paymentId) {
+      texto += `*ID DA TRANSACÃO:* ${paymentId}\n`;
+    }
+
+    texto += `\n--------------------------------\n`;
+    texto += `*DADOS PARA ENTREGA:*\n`;
+    texto += `_Por favor, informe abaixo se prefere retirar ou o endereço para entrega:_ \n\n`;
+    texto += `📍 Endereço: \n`;
+    texto += `🕒 Horário pretendido: \n`;
 
     const link = `https://wa.me/${numeroCarla}?text=${encodeURIComponent(texto)}`;
     
-    // 1. Abre o WhatsApp
     window.open(link, "_blank");
-
-    // 2. LIMPA O CARRINHO
     clearCart();
-
-    // 3. VOLTA PARA A HOME
     window.location.href = "/";
   };
 
