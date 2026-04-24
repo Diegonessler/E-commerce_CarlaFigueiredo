@@ -632,16 +632,22 @@ button {
   overflow: hidden;
   border: 1px solid var(--line-soft);
   box-shadow: var(--shadow-soft);
+  display: flex;
+  flex-direction: column;
 }
 
 .kit-thumb {
   height: 200px;
   background-size: cover;
   background-position: center;
+  flex-shrink: 0;
 }
 
 .kit-info {
   padding: 15px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .kit-info h3 {
@@ -656,12 +662,29 @@ button {
   font-size: 0.95rem;
   line-height: 1.38;
   margin-bottom: 8px;
+  flex: 1;
 }
 
 .kit-info strong {
   color: var(--brown-main);
   font-size: 1.06rem;
   font-weight: 800;
+}
+
+/* Botão carrinho dentro do kit usa product-bottom — garantir visibilidade */
+.kit-info .product-bottom {
+  margin-top: 10px;
+}
+
+.kit-info .product-bottom button {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 12px !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0;
 }
 
 /* ===== ABOUT ===== */
@@ -1169,6 +1192,7 @@ button {
     min-height: unset;
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -1205,21 +1229,25 @@ button {
   }
 
   .kit-card {
-    min-width: 200px;
+    min-width: 210px;
+    max-width: 210px;
     flex-shrink: 0;
     scroll-snap-align: start;
   }
 
   .kit-thumb {
-    height: 150px;
-  }
-
-  .kit-info h3 {
-    font-size: 0.95rem;
+    height: 160px;
+    background-size: cover;
+    background-position: center;
   }
 
   .kit-info p {
-    font-size: 0.88rem;
+    font-size: 0.85rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   /* About */
