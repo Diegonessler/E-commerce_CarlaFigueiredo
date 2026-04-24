@@ -6,7 +6,7 @@ import LoginAdmin from './LoginAdmin.jsx'
 import CatalogoProdutos from './CatalogoProdutos.jsx'
 import CatalogoKits from './CatalogoKits.jsx'
 import Carrinho from './Carrinho.jsx'
-import Sucesso from './Sucesso.jsx' // <--- IMPORTANTE: Importe a nova página
+import Sucesso from './Sucesso.jsx' 
 import { CartProvider } from './CartContext'
 import { supabase } from './supabaseClient'
 import './index.css'
@@ -21,6 +21,7 @@ function Router() {
       setPath(window.location.pathname);
     };
 
+    // Escuta mudanças de navegação
     window.addEventListener('popstate', handleLocationChange);
 
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -40,7 +41,7 @@ function Router() {
 
   if (loading) return <div style={{ padding: '20px', textAlign: 'center' }}>Carregando...</div>;
 
-  // --- Lógica de Roteamento ---
+  // --- Lógica de Roteamento Corrigida ---
   
   // Login e Admin
   if (path === '/admin') {
@@ -64,8 +65,10 @@ function Router() {
   if (path === '/todos-kits')     return <CatalogoKits />;
   if (path === '/carrinho')       return <Carrinho />;
   
-  // --- NOVA ROTA ADICIONADA AQUI ---
-  if (path === '/sucesso')        return <Sucesso />; 
+  // MODIFICAÇÃO AQUI: Usamos .startsWith para aceitar os parâmetros do Mercado Pago
+  if (path.startsWith('/sucesso')) {
+    return <Sucesso />;
+  }
 
   // Home
   return <App />;
@@ -77,4 +80,4 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Router />
     </CartProvider>
   </React.StrictMode>,
-)
+) 
