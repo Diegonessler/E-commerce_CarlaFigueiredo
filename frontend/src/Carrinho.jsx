@@ -57,7 +57,7 @@ export default function Carrinho() {
         <button onClick={() => window.history.back()} style={btnBackStyle}>
           <ArrowLeft size={28} color="#8D6E63" />
         </button>
-        <h2 style={{ color: '#5D4037', margin: 0, marginLeft: '10px', fontSize: '24px' }}>Finalizar Pedido</h2>
+        <h2 style={{ color: '#5D4037', margin: 0, marginLeft: '10px', fontSize: '24px' }}>Voltar a Loja</h2>
       </header>
 
       <div style={mainGridStyle}>
