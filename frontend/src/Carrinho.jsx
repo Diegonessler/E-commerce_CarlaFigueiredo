@@ -2,18 +2,22 @@ import React, { useState } from 'react';
 import { useCart } from './CartContext';
 import { ArrowLeft, Trash2, Plus, Minus, Truck, Store } from 'lucide-react';
 
+const navigate = (path) => {
+  window.history.pushState({}, '', path);
+  window.dispatchEvent(new PopStateEvent('popstate'));
+};
+
 export default function Carrinho() {
   const { cart, removeFromCart, totalValue, updateQuantity } = useCart();
   const [cliente, setCliente] = useState({ 
     nome: '', 
     endereco: '', 
     horario: '', 
-    tipoEntrega: 'entrega' // 'entrega' ou 'retirada'
+    tipoEntrega: 'entrega'
   });
   const [enviando, setEnviando] = useState(false);
 
   const finalizarPedido = async () => {
-    // Validação lógica: se for entrega, endereço é obrigatório. Se for retirada, não.
     if (!cliente.nome || (cliente.tipoEntrega === 'entrega' && !cliente.endereco)) {
       alert("Por favor, preencha seu nome e as informações de entrega!");
       return;
@@ -31,7 +35,6 @@ export default function Carrinho() {
       const data = await res.json();
 
       if (data.init_point) {
-        // Salva os dados para a página de sucesso ler depois
         const enderecoFinal = cliente.tipoEntrega === 'retirada' ? 'RETIRADA NO LOCAL' : cliente.endereco;
         
         localStorage.setItem('dados_cliente', JSON.stringify({
@@ -40,7 +43,6 @@ export default function Carrinho() {
           horario: cliente.horario || 'A combinar'
         }));
 
-        // Redireciona para o Mercado Pago
         window.location.href = data.init_point;
       }
     } catch (err) {
@@ -54,7 +56,8 @@ export default function Carrinho() {
   return (
     <div style={containerStyle}>
       <header style={{ display: 'flex', alignItems: 'center', marginBottom: '40px' }}>
-        <button onClick={() => window.history.back()} style={btnBackStyle}>
+        {/* ✅ CORRIGIDO: navega sem recarregar a página */}
+        <button onClick={() => navigate('/')} style={btnBackStyle}>
           <ArrowLeft size={28} color="#8D6E63" />
         </button>
         <h2 style={{ color: '#5D4037', margin: 0, marginLeft: '10px', fontSize: '24px' }}>Voltar a Loja</h2>
@@ -62,13 +65,17 @@ export default function Carrinho() {
 
       <div style={mainGridStyle}>
         
-        {/* COLUNA ESQUERDA: LISTA DE PRODUTOS */}
         <div style={cardPedidoStyle}>
           <h3 style={titleStyle}>Seu Pedido</h3>
           <div style={{ borderBottom: '2px solid #8D6E63', marginBottom: '20px' }} />
           
           {cart.length === 0 ? (
-            <p style={{ textAlign: 'center', color: '#8D6E63' }}>Seu carrinho está vazio.</p>
+            <div style={{ textAlign: 'center', padding: '20px' }}>
+              <p style={{ color: '#8D6E63' }}>Seu carrinho está vazio.</p>
+              <button onClick={() => navigate('/')} style={{ background: '#8D6E63', color: '#fff', border: 'none', padding: '10px', borderRadius: '8px', cursor: 'pointer' }}>
+                Escolher Bolachas
+              </button>
+            </div>
           ) : (
             cart.map(item => (
               <div key={item.id} style={itemRowStyle}>
@@ -94,7 +101,6 @@ export default function Carrinho() {
           </div>
         </div>
 
-        {/* COLUNA DIREITA: DADOS E ENTREGA */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
           
           <section>
@@ -108,7 +114,6 @@ export default function Carrinho() {
               onChange={e => setCliente({...cliente, nome: e.target.value})}
             />
 
-            {/* SELETOR DE ENTREGA OU RETIRADA */}
             <div style={toggleContainerStyle}>
               <button 
                 onClick={() => setCliente({...cliente, tipoEntrega: 'entrega'})}
@@ -132,7 +137,6 @@ export default function Carrinho() {
               </button>
             </div>
 
-            {/* CAMPOS CONDICIONAIS */}
             {cliente.tipoEntrega === 'entrega' ? (
               <textarea 
                 placeholder="Endereço Completo (Rua, Número, Bairro)" 
@@ -174,7 +178,6 @@ export default function Carrinho() {
   );
 }
 
-// ESTILOS
 const containerStyle = { backgroundColor: '#F5E6D3', minHeight: '100vh', padding: '40px 20px', fontFamily: '"Segoe UI", Roboto, sans-serif' };
 const mainGridStyle = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '40px', maxWidth: '1100px', margin: '0 auto' };
 const cardPedidoStyle = { backgroundColor: '#FFF9F0', padding: '30px', borderRadius: '20px', boxShadow: '0 4px 15px rgba(0,0,0,0.05)', alignSelf: 'start' };

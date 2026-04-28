@@ -3,6 +3,10 @@ import { supabase } from "./supabaseClient";
 import { ArrowLeft, ShoppingCart } from "lucide-react";
 import { useCart } from "./CartContext";
 
+const navigate = (path) => {
+  window.history.pushState({}, '', path);
+  window.dispatchEvent(new PopStateEvent('popstate'));
+};
 
 export default function CatalogoKits() {
   const [kits, setKits] = useState([]);
@@ -25,11 +29,11 @@ export default function CatalogoKits() {
   return (
     <div className="catalog-page">
       <div className="catalog-container">
-
         <header className="catalog-header">
-          <a href="/" className="catalog-back-btn" aria-label="Voltar">
+          {/* ✅ CORRIGIDO */}
+          <button onClick={() => navigate('/')} className="catalog-back-btn" aria-label="Voltar" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
             <ArrowLeft size={20} />
-          </a>
+          </button>
           <h1>
             Kits Especiais
             <span>para presentear com amor</span>
@@ -37,21 +41,11 @@ export default function CatalogoKits() {
         </header>
 
         <div className="catalog-grid">
-          {loading && (
-            <p className="catalog-loading">Carregando kits... 🎁</p>
-          )}
-
-          {!loading && kits.length === 0 && (
-            <p className="catalog-empty">Nenhum kit cadastrado ainda.</p>
-          )}
-
+          {loading && <p className="catalog-loading">Carregando kits... 🎁</p>}
+          {!loading && kits.length === 0 && <p className="catalog-empty">Nenhum kit cadastrado ainda.</p>}
           {kits.map((item) => (
             <div key={item.id} className="catalog-card">
-              <img
-                src={item.image}
-                alt={item.title}
-                className="catalog-card-img"
-              />
+              <img src={item.image} alt={item.title} className="catalog-card-img" />
               <div className="catalog-card-body">
                 <h3>{item.title}</h3>
                 <p className="desc">{item.description || item.desc}</p>
@@ -67,7 +61,6 @@ export default function CatalogoKits() {
             </div>
           ))}
         </div>
-
       </div>
     </div>
   );
